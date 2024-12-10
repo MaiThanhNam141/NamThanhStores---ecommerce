@@ -1,120 +1,73 @@
-.payment-container {
+.payment-callback-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    min-height: 100vh;
 }
 
-.payment-header {
+.payment-callback-header {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    background-color: #DEFFD3;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .back-button {
     background: none;
     border: none;
-    font-size: 18px;
     cursor: pointer;
     margin-right: 20px;
 }
 
-.payment-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.address-section, .order-details, .order-summary, .notes-section, .payment-method {
-    margin-bottom: 30px;
-}
-
-h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.address-area {
-    background-color: #F5F5F5;
-    padding: 15px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.order-item {
+.payment-callback-content {
     display: flex;
+    justify-content: center;
     align-items: center;
+    min-height: 60vh;
+}
+
+.success-container, .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.success-text {
+    font-size: 24px;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.loading-img {
+    width: 90%;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    font-size: 16px;
+    color: #333;
     margin-bottom: 10px;
 }
 
-.item-image {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    margin-right: 10px;
-}
-
-.item-name {
-    flex: 1;
-}
-
-.item-quantity {
-    font-weight: bold;
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
-.total {
-    font-weight: bold;
-    color: #3a915e;
-}
-
-.shipping-note {
-    color: #FF0000;
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    resize: vertical;
-}
-
-select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.payment-button {
-    width: 100%;
-    padding: 15px;
-    background-color: #87bc9d;
-    color: white;
+.home-button {
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: #FFF;
     border: none;
-    border-radius: 8px;
-    font-size: 18px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.payment-button:hover {
-    background-color: #6fa982;
-}
-
-.payment-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.home-button:hover {
+    background-color: #45a049;
 }
 

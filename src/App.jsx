@@ -7,6 +7,7 @@ import Homepage from './pages/Homepage.jsx';
 import Chat from './pages/Chat.jsx';
 import Product from './pages/Products.jsx';
 import Orders from './pages/Orders.jsx';
+import OrderDetail from './pages/OrderDetail.jsx';
 import Profile from './pages/Profile.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Search from './pages/Search.jsx';
@@ -30,12 +31,13 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path="profile" element={<Profile />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="order-detail/:id" element={<OrderDetail />} />
           <Route path="products" element={<Product />} />
           <Route path="support" element={<Chat />} />
           <Route path='search' element={<Search />} />
           <Route path='cart' element={<Cart />} />
           <Route path='payment' element={<Payment />} />
-          <Route path='paymentcallback' element={<PaymentCallback />} />
+          <Route path='payment-callback' element={<PaymentCallback />} />
         </Route>
         
         <Route path="register" element={<Register />} />

@@ -7,8 +7,8 @@ import Swal from 'sweetalert2';
 
 const MySwal = Swal.mixin({
     customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+        confirmButton: 'btn-success',
+        cancelButton: 'btn-danger'
     },
     buttonsStyling: false,
     width: '600px', 
@@ -229,7 +229,7 @@ const Payment = () => {
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
-
+    
     return (
         <div className="payment-container">
             <div className="payment-header">

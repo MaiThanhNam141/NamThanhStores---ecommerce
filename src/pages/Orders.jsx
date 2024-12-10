@@ -1,104 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import { Tab } from '@headlessui/react';
-import Logo from "../assets/logo.png";
+import { Link } from 'react-router-dom';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db, auth } from '../firebase/config';
+import {  ShoppingCart } from 'lucide-react';
 import '../style/Order.css';
 
-// Mock data for demonstration
-const mockOrders = [
-  {
-    id: '241031_808711',
-    amount: 1000000,
-    app_trans_id: "241031_808711",
-    app_user: "22IzlKFY9Jbmn7nhArGxCplKVXb2",
-    embed_data: {
-      address: "Hà nội",
-      email: "supernanocheat@gmail.com",
-      name: "Mai Thành Nam",
-      phone: 123456789,
-      status: "Cancelled"
-    },
-    item: [
-      {
-        id: "0QiYcN7NeK2pBPRRivh3",
-        itemCount: 1
-      }
-    ],
-    server_time: 1730338969219
-  },
-  // Add more mock orders with different statuses here
-];
+const translateStatus = (status) => {
+    switch (status) {
+        case "Pending":
+            return "Đang chờ xác nhận";
+        case "Preparing":
+            return "Đang chuẩn bị";
+        case "Shipping":
+            return "Đang giao hàng";
+        case "Completed":
+            return "Hoàn thành";
+        case "Cancelled":
+            return "Đã hủy";
+        default:
+            return "Không xác định";
+    }
+};
 
-const Order = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulating API call
-    setTimeout(() => {
-      setOrders(mockOrders);
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  const orderStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
-
-  const formatDate = (timestamp) => {
-    return new Date(timestamp).toLocaleString();
-  };
-
-  const renderOrderCard = (order) => (
-    <div key={order.id} className="order-card">
-      <h3 className="order-id">Đơn hàng #{order.app_trans_id}</h3>
-      <p className="order-amount">Tổng tiền: {order.amount.toLocaleString()} VND</p>
-      <p className="order-date">Ngày đặt: {formatDate(order.server_time)}</p>
-      <div className="order-details">
-        <p><strong>Tên:</strong> {order.embed_data.name}</p>
-        <p><strong>Email:</strong> {order.embed_data.email}</p>
-        <p><strong>Số điện thoại:</strong> {order.embed_data.phone}</p>
-        <p><strong>Địa chỉ:</strong> {order.embed_data.address}</p>
-      </div>
-      <p className="order-status">Trạng thái: {order.embed_data.status}</p>
-      <button className="view-details-btn">Xem chi tiết</button>
-    </div>
-  );
-
+const OrderList = ({ orders }) => {
   return (
-    <div className="order-container">
-      <div className="logo-container">
-        <img src={Logo} alt="Company Logo" className="logo" />
+      <div className="order-list">
+          {orders.length > 0 ? (
+              orders.map((item) => (
+                  <Link 
+                      key={item.id} 
+                      to={`/order-detail/${item.id}`} 
+                      state={{ order: item }} 
+                      className="order-item"
+                  >
+                      <p>Mã đơn hàng: {item.id}</p>
+                      <p>Trạng thái: {translateStatus(item.embed_data.status)}</p>
+                      <p>
+                          Tổng tiền: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.amount)}
+                      </p>
+                  </Link>
+              ))
+          ) : (
+              <div className="empty-container">
+                  <ShoppingCart size={50} color="red" />
+                  <p className="empty-text">Bạn không có đơn hàng nào ở đây cả</p>
+              </div>
+          )}
       </div>
-      <h1 className="page-title">Đơn hàng của bạn</h1>
-      {loading ? (
-        <p className="loading">Đang tải đơn hàng...</p>
-      ) : (
-        <Tab.Group>
-          <Tab.List className="tab-list">
-            {orderStatuses.map((status) => (
-              <Tab
-                key={status}
-                className={({ selected }) =>
-                  `tab ${selected ? 'tab-selected' : ''}`
-                }
-              >
-                {status}
-              </Tab>
-            ))}
-          </Tab.List>
-          <Tab.Panels>
-            {orderStatuses.map((status) => (
-              <Tab.Panel key={status}>
-                <div className="order-list">
-                  {orders
-                    .filter((order) => order.embed_data.status === status)
-                    .map(renderOrderCard)}
-                </div>
-              </Tab.Panel>
-            ))}
-          </Tab.Panels>
-        </Tab.Group>
-      )}
-    </div>
   );
 };
 
-export default Order;
+
+const OrderedPanel = () => {
+    const [allOrders, setAllOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const uid = auth.currentUser.uid;
+                const ordersRef = collection(db, 'orders');
+                const q = query(ordersRef, where('app_user', '==', uid));
+                const querySnapshot = await getDocs(q);
+                const orders = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setAllOrders(orders);
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    const filterOrdersByStatus = (status) => {
+        return status === ''
+            ? allOrders
+            : allOrders.filter(order => order.embed_data?.status === status);
+    };
+
+    if (loading) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    return (
+        <div className="ordered-panel">
+            <Tabs>
+                <TabList>
+                    <Tab>Tất cả đơn hàng</Tab>
+                    <Tab>Đang chờ xác nhận</Tab>
+                    <Tab>Đang chuẩn bị</Tab>
+                    <Tab>Đang giao hàng</Tab>
+                    <Tab>Giao thành công</Tab>
+                    <Tab>Đã hủy</Tab>
+                </TabList>
+
+                <TabPanel>
+                    <OrderList orders={filterOrdersByStatus('')} />
+                </TabPanel>
+                <TabPanel>
+                    <OrderList orders={filterOrdersByStatus('Pending')} />
+                </TabPanel>
+                <TabPanel>
+                    <OrderList orders={filterOrdersByStatus('Preparing')} />
+                </TabPanel>
+                <TabPanel>
+                    <OrderList orders={filterOrdersByStatus('Shipping')} />
+                </TabPanel>
+                <TabPanel>
+                    <OrderList orders={filterOrdersByStatus('Completed')} />
+                </TabPanel>
+                <TabPanel>
+                    <OrderList orders={filterOrdersByStatus('Cancelled')} />
+                </TabPanel>
+            </Tabs>
+        </div>
+    );
+};
+
+export default OrderedPanel;
+
