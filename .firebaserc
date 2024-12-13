@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "namthanhstores"
-  }
+  },
+  "targets": {
+    "namthanhstores": {
+      "hosting": {
+        "shop": [
+          "namthanhstores-shop"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
