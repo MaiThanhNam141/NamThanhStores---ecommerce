@@ -1,0 +1,156 @@
+.search-screen {
+    padding: 20px;
+    background-color: #fff;
+    min-height: 100vh;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+.search-input {
+    flex: 1;
+    margin-left: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.filter-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+}
+
+.filter-select {
+    flex: 1;
+    margin-left: 10px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-container {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    width: 180px;
+}
+
+.product-image {
+    object-fit: contain;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.product-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sale {
+    position: absolute;
+    right: -35%;
+    top: 8%;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    padding: 5px 0;
+    width: 100%;
+    text-align: center;
+    transform: rotate(45deg);
+    font-size: 12px;
+}
+
+.price-button {
+    background-color: #fff;
+    padding: 10px;
+    margin: 5px;
+    width: 80%;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #898989;
+    font-size: 12px;
+}
+
+.discount-price {
+    color: #FF6347;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.product-price {
+    color: #000;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.empty-text {
+    text-align: center;
+    margin-top: 20px;
+    color: #888;
+}
+
+.loading {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.image-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+

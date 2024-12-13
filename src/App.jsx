@@ -16,6 +16,7 @@ import Cart from './pages/Cart.jsx'
 import { AuthContext } from './context/AuthContext.jsx';
 import Payment from './pages/Payment.jsx';
 import PaymentCallback from './pages/PaymentCallback.jsx';
+import DetailScreen from './pages/DetailScreen.jsx';
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -32,7 +33,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="orders" element={<Orders />} />
           <Route path="order-detail/:id" element={<OrderDetail />} />
-          <Route path="products" element={<Product />} />
+          <Route path="detail" element={<DetailScreen />} />
           <Route path="support" element={<Chat />} />
           <Route path='search' element={<Search />} />
           <Route path='cart' element={<Cart />} />

@@ -15,6 +15,7 @@
     "@firebase/database": "^1.0.10",
     "@firebase/firestore": "^4.7.3",
     "@firebase/storage": "^0.13.2",
+    "@google/generative-ai": "^0.21.0",
     "@headlessui/react": "^2.2.0",
     "chart.js": "^4.4.6",
     "firebase": "^10.14.1",

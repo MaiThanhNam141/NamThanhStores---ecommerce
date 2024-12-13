@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { CartContext } from "../context/CartContext";
 import { getDocumentRef } from "../context/FirebaseFunction";
-import "../style/Homepage.css"; // Import CSS
+import "../style/Homepage.css";
 
 const Homepage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sliderImages, setSliderImages] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [selectedImage, setSelectedImage] = useState(null); // State for zoomed image
 
+    const navigate = useNavigate();
     const { addItemToCart } = useContext(CartContext);
 
     useEffect(() => {
@@ -58,6 +60,29 @@ const Homepage = () => {
         alert("Thêm thành công vào giỏ hàng");
     };
 
+    const handleImageClick = (imageUri) => {
+        setSelectedImage(imageUri); // Set the selected image for zoom
+    };
+
+    const handleDetailScreen = (product) => {
+        const simplifiedProduct = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            discount: product.discount,
+            desc: product.desc,
+            rate: product.rate,
+            rateCount: product.rateCount,
+            type: product.type,
+            target: product.target,
+            goal: product.goal,
+            netWeight: product.netWeight,
+            quatity: product.quatity,
+        };
+        navigate("/detail", { state: { selectedItem: simplifiedProduct } });
+    };
+
     return (
         <div className="home-screen">
             {/* Slider Section */}
@@ -104,8 +129,8 @@ const Homepage = () => {
                                     padding: "10px",
                                     width: "calc(25% - 10px)", // 4 cột
                                     backgroundColor: "#fff",
-                                    height:'500px',
-                                    alignItems:'center',
+                                    height: "500px",
+                                    alignItems: "center",
                                 }}
                             >
                                 <img
@@ -116,9 +141,18 @@ const Homepage = () => {
                                         height: "60%",
                                         objectFit: "cover",
                                         borderRadius: "4px",
+                                        cursor: "pointer", // Add pointer cursor for click
                                     }}
+                                    onClick={() => handleImageClick(product.image)} // Zoom image on click
                                 />
-                                <h3 style={{ color: "#333", fontSize: "16px" }}>
+                                <h3
+                                    style={{
+                                        color: "#333",
+                                        fontSize: "16px",
+                                        cursor: "pointer", // Add pointer cursor for click
+                                    }}
+                                    onClick={() => handleDetailScreen(product)} // Navigate to detail page
+                                >
                                     {product.name}
                                 </h3>
                                 <p style={{ color: "#333", marginBottom: "5px" }}>
@@ -139,8 +173,9 @@ const Homepage = () => {
                                         color: "#fff",
                                         border: "none",
                                         borderRadius: "4px",
-                                        textAlign: 'center',
+                                        textAlign: "center",
                                         cursor: "pointer",
+                                        alignSelf: "center",
                                     }}
                                 >
                                     Thêm vào giỏ
@@ -150,6 +185,35 @@ const Homepage = () => {
                     </div>
                 )}
             </div>
+
+            {/* Zoomed Image Modal */}
+            {selectedImage && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 1000,
+                    }}
+                    onClick={() => setSelectedImage(null)} // Close modal on click
+                >
+                    <img
+                        src={selectedImage}
+                        alt="Zoomed product"
+                        style={{
+                            maxWidth: "90%",
+                            maxHeight: "90%",
+                            objectFit: "contain",
+                        }}
+                    />
+                </div>
+            )}
         </div>
     );
 };
